@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience Mehul Manoharan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: url('baby mehul.jpg') no-repeat center center fixed; /* Ensure 'baby mehul.jpg' is in the same directory or provide a full path */
+            background-size: cover;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            cursor: pointer; /* Indicate it's clickable */
+            display: flex; /* For centering initial message */
+            justify-content: center; /* For centering initial message */
+            align-items: center; /* For centering initial message */
+            height: 100vh; /* Make body full height for centering */
+        }
+
+        .bouncingText {
+            position: absolute;
+            font-size: 72px;
+            font-weight: bold;
+            color: #4caf50;
+            white-space: nowrap;
+            display: none;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+            transition: color 0.3s ease-out;
+        }
+
+        .bouncingText.sex-king {
+            font-size: 80px;
+            color: #FF00FF;
+        }
+
+        #initialMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 55px;
+            color: #FFFFFF;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(50, 50, 50, 0.8));
+            padding: 30px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            text-shadow: 2px 2px 5px black;
+            cursor: pointer;
+            z-index: 100;
+            border: 5px solid;
+            animation: 
+                pulse 2s infinite alternate,
+                rainbowBorder 4s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.03); }
+        }
+
+        @keyframes rainbowBorder {
+            0% { border-color: #FF0000; }
+            14% { border-color: #FF7F00; }
+            28% { border-color: #FFFF00; }
+            42% { border-color: #00FF00; }
+            57% { border-color: #0000FF; }
+            71% { border-color: #4B0082; }
+            85% { border-color: #EE82EE; }
+            100% { border-color: #FF0000; }
+        }
+
+        /* Styles for the notification container and individual messages */
+        #notificationContainer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column; /* Stacks chronologically (first on top, new ones below) */
+            gap: 10px; /* Space between notifications */
+            z-index: 200;
+            max-height: 90vh; /* Prevent notifications from going off screen */
+            overflow-y: auto; /* Allow scrolling if too many notifications pile up */
+            padding-right: 10px; /* Add some padding to prevent scrollbar overlap */
+            transition: all 0.5s ease-out; /* Smooth transition for pushing up/down */
+        }
+
+        .phone-message { /* Class for each individual message notification */
+            background-color: rgba(0, 0, 0, 0.85); /* Dark background */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            font-size: 20px;
+            text-align: left;
+            max-width: 300px; /* Limit width */
+            overflow: hidden; /* Hide overflow for text */
+            word-wrap: break-word; /* Break long words */
+            opacity: 0; /* Start invisible for fade-in */
+            transform: translateY(20px); /* Start slightly below final position for slide-up */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Smooth transition for appearance */
+        }
+
+        .phone-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .phone-message .sender {
+            font-weight: bold;
+            color: #4CAF50; /* Green color for sender name */
+            margin-bottom: 5px;
+        }
+
+        .phone-message .message-text {
+            font-size: 18px;
+            color: #E0E0E0; /* Lighter color for message */
+        }
+    </style>
+</head>
+<body>
+    <audio id="backgroundMusic" loop>
+        <source src="yamla_pagla_horn.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="notificationSound" preload="auto">
+        <source src="notification.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="initialMessage">
+        Click to experience Mehul Manoharan
+    </div>
+
+    <div id="notificationContainer">
+        </div>
+
+    <script>
+        const container = document.body;
+        const mainText = "Mehul Manoharan";
+        const specialText = "Sex King";
+        const numMehulTexts = 9;
+        const numSpecialTexts = 1;
+        const music = document.getElementById('backgroundMusic');
+        const notificationSound = document.getElementById('notificationSound');
+        notificationSound.volume = 0.5; 
+        const initialMessage = document.getElementById('initialMessage');
+        const notificationContainer = document.getElementById('notificationContainer');
+        let experienceStarted = false;
+
+        function createBouncingText(textToDisplay, isSpecial = false) {
+            const textElement = document.createElement("div");
+            textElement.className = "bouncingText";
+            if (isSpecial) {
+                textElement.classList.add('sex-king');
+            }
+            textElement.textContent = textToDisplay;
+            container.appendChild(textElement);
+
+            textElement.style.display = 'block';
+
+            const textWidth = textElement.offsetWidth;
+            const textHeight = textElement.offsetHeight;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            const padding = 20; // Padding from screen edges
+            // Ensure initial position is safely within bounds and not overlapping immediately
+            let x = padding + Math.random() * (containerWidth - textWidth - 2 * padding);
+            let y = padding + Math.random() * (containerHeight - textHeight - 2 * padding);
+
+            // Ensure speeds are not zero and have a good range
+            let xSpeed = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 4); // Speed between 2 and 6
+            let ySpeed = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 4); // Speed between 2 and 6
+
+            function changeColor() {
+                const colors = ["#FF6347", "#00FFFF", "#FFD700", "#FF1493", "#8A2BE2", "#4caf50", "#FFA500", "#FF4500", "#7B68EE", "#ADFF2F", "#DA70D6"];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                textElement.style.color = randomColor;
+            }
+
+            function updatePosition() {
+                const currentContainerWidth = container.clientWidth;
+                const currentContainerHeight = container.clientHeight;
+
+                x += xSpeed;
+                y += ySpeed;
+
+                // Collision detection and correction for X-axis
+                if (x + textWidth >= currentContainerWidth) {
+                    x = currentContainerWidth - textWidth; // Clamp to right edge
+                    xSpeed = -xSpeed; // Reverse direction
+                    changeColor(); // Change color on bounce
+                } else if (x <= 0) {
+                    x = 0; // Clamp to left edge
+                    xSpeed = -xSpeed; // Reverse direction
+                    changeColor(); // Change color on bounce
+                }
+
+                // Collision detection and correction for Y-axis
+                if (y + textHeight >= currentContainerHeight) {
+                    y = currentContainerHeight - textHeight; // Clamp to bottom edge
+                    ySpeed = -ySpeed; // Reverse direction
+                    changeColor(); // Change color on bounce
+                } else if (y <= 0) {
+                    y = 0; // Clamp to top edge
+                    ySpeed = -ySpeed; // Reverse direction
+                    changeColor(); // Change color on bounce
+                }
+
+                textElement.style.left = x + "px";
+                textElement.style.top = y + "px";
+            }
+
+            setInterval(updatePosition, 20);
+            changeColor();
+        }
+
+        // Function to create and display a new phone message notification
+        function createAndShowPhoneMessage(message, delay = 0) {
+            setTimeout(() => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('phone-message');
+
+                const senderDiv = document.createElement('div');
+                senderDiv.classList.add('sender');
+                senderDiv.textContent = "New message from Mehul Manoharan";
+
+                const textDiv = document.createElement('div');
+                textDiv.classList.add('message-text');
+                textDiv.textContent = message;
+
+                messageDiv.appendChild(senderDiv);
+                messageDiv.appendChild(textDiv);
+
+                notificationContainer.appendChild(messageDiv);
+
+                // Play the notification sound
+                if (notificationSound) {
+                    notificationSound.currentTime = 0; // Rewind to start if already playing
+                    notificationSound.play().catch(error => console.error("Notification sound play failed:", error));
+                }
+
+                // Trigger reflow and add 'show' class for animation
+                messageDiv.offsetHeight;
+                messageDiv.classList.add('show');
+                
+            }, delay);
+        }
+
+        document.addEventListener('click', () => {
+            if (!experienceStarted) {
+                experienceStarted = true;
+
+                // Remove the body's centering styles
+                document.body.style.display = '';
+                document.body.style.justifyContent = '';
+                document.body.style.alignItems = '';
+                document.body.style.height = '';
+
+                initialMessage.style.display = 'none';
+
+                const playPromise = music.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        console.log("Music started playing!");
+                        for (let i = 0; i < numMehulTexts; i++) {
+                            createBouncingText(mainText);
+                        }
+                        for (let i = 0; i < numSpecialTexts; i++) {
+                            createBouncingText(specialText, true);
+                        }
+                        // First message after 5 seconds
+                        createAndShowPhoneMessage("Kya be randi?", 5000); 
+                        // Second message after 15 seconds
+                        createAndShowPhoneMessage("Band karo betichod", 15000); 
+                    }).catch(error => {
+                        console.error("Autoplay prevented:", error);
+                        for (let i = 0; i < numMehulTexts; i++) {
+                            createBouncingText(mainText);
+                        }
+                        for (let i = 0; i < numSpecialTexts; i++) {
+                            createBouncingText(specialText, true);
+                        }
+                        // Still show messages even if music fails to autoplay
+                        createAndShowPhoneMessage("Kya be randi?", 5000);
+                        createAndShowPhoneMessage("Band karo betichod", 15000);
+                    });
+                } else {
+                    console.log("Music might play without promise handling.");
+                    for (let i = 0; i < numMehulTexts; i++) {
+                        createBouncingText(mainText);
+                    }
+                    for (let i = 0; i < numSpecialTexts; i++) {
+                        createBouncingText(specialText, true);
+                    }
+                    createAndShowPhoneMessage("Kya be randi?", 5000);
+                    createAndShowPhoneMessage("Band karo betichod", 15000);
+                }
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
